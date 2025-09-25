@@ -171,7 +171,7 @@ The following scripts facilitate the data pre-processing workflow:
 
 [^12]: Shin, J., von Lühmann, A., Blankertz, B., Kim, D.W., Jeong, J., Hwang, H.J. and Müller, K.R., 2017. Open access dataset for EEG+NIRS single-trial classification. IEEE Transactions on Neural Systems and Rehabilitation Engineering, 25(10), pp.1735-1745.
 
-[^13]: Yi, Weibo, et al. "Evaluation of EEG oscillatory patterns and cognitive process during simple and compound limb motor imagery." PloS one 9.12 (2014). <https://doi.org/10.1371/journal.pone.0114853>
+[^13]: Weibo, Y., et al. "Evaluation of EEG oscillatory patterns and cognitive process during simple and compound limb motor imagery." PloS one 9.12 (2014). <https://doi.org/10.1371/journal.pone.0114853>
 
 [^14]: Zhou B, Wu X, Lv Z, Zhang L, Guo X (2016) A Fully Automated Trial Selection Method for Optimization of Motor Imagery Based Brain-Computer Interface. PLoS ONE 11(9). <https://doi.org/10.1371/journal.pone.0162657>
 

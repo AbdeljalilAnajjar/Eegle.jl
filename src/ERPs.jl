@@ -329,18 +329,18 @@ merge(mark::Vector{Vector{S}}, mergeClasses::Vector{Vector{S}}) where S <: Int =
 # (empty vectors are allowed), return `𝐓` if `linComb` is nothing (default), the `linComb` columns of the trials in `𝐓` if `linComb`
 # is en integer or a linear combination given my vector `linComb` of the trials in `𝐓` if `linComb` is a vector of reals.
 # xxx TO DO: allow readNY to call this function
-function _linComb(𝐓, linComb::Union{Vector{R}, S, Nothing} = nothing) where {R<:Real, S<:Int}
+function _linComb(𝐓, linComb::Union{Vector{R}, S, Nothing} = nothing, shape::Symbol=:cat) where {R<:Real, S<:Int}
     if      isnothing(linComb)
             return 𝐓
     elseif  linComb isa Int
-            if 𝐓 isa Vector 
+            if shape == :cat # 𝐓 is a Vector
                 return [t[:, linComb] for t ∈ 𝐓]
-            else # vector of vectors
+            else # 𝐓 is a Vector of Vectors
                 return [isempty(r) ? [] : [t[:, linComb] for t ∈ r] for r ∈ 𝐓]
             end
     else    # linComb isa Vector
             e = "Eegle.ERPs, function `trials`: the length of `linComb` does not match the number of columns (electrodes) of the trials"
-            if 𝐓 isa Vector 
+            if shape == :cat 
                 length(linComb)==size(𝐓[1], 2) || error(e)
                 return [t*linComb for t ∈ 𝐓]
             else # vector of vector
@@ -351,6 +351,7 @@ function _linComb(𝐓, linComb::Union{Vector{R}, S, Nothing} = nothing) where {
             end
     end
 end
+
 
 """
 ```julia
@@ -436,7 +437,8 @@ f = randn(o.ne)
 trials( X::Matrix{R}, stim::Vector{S}, wl::S;
         weights::Union{Vector{R}, Nothing} = nothing,
         linComb::Union{Vector{R}, S, Nothing} = nothing,
-        offset::S = 0) where {R<:Real, S<:Int} =
+        offset::S = 0,
+        shape::Symbol=:cat) where {R<:Real, S<:Int} =
     if isempty(stim)
         return []
     else
@@ -454,15 +456,15 @@ trials( X::Matrix{R}, mark::Vector{Vector{S}}, wl::S;
         shape::Symbol=:cat) where {R<:Real, S<:Int} =
     if shape==:cat
         if isnothing(weights)
-            return _linComb([X[mark[i][j]+offset:mark[i][j]+offset+wl-1, :] for i∈eachindex(mark) for j∈eachindex(mark[i])], linComb)
+            return _linComb([X[mark[i][j]+offset:mark[i][j]+offset+wl-1, :] for i∈eachindex(mark) for j∈eachindex(mark[i])], linComb, shape)
         else
-            return _linComb([X[mark[i][j]+offset:mark[i][j]+offset+wl-1, :]*weights[i][j] for i∈eachindex(mark) for j∈eachindex(mark[i])], linComb)
+            return _linComb([X[mark[i][j]+offset:mark[i][j]+offset+wl-1, :]*weights[i][j] for i∈eachindex(mark) for j∈eachindex(mark[i])], linComb, shape)
         end
     else
         if isnothing(weights)
-            return _linComb([trials(X, m, wl; offset=offset) for m ∈ mark], linComb)
+            return _linComb([trials(X, m, wl; offset=offset) for m ∈ mark], linComb, shape)
         else
-            return _linComb([trials(X, m, wl; weights=w, offset=offset) for (m, w) ∈ zip(mark, weights)], linComb)
+            return _linComb([trials(X, m, wl; weights=w, offset=offset) for (m, w) ∈ zip(mark, weights)], linComb, shape)
         end
     end
 
