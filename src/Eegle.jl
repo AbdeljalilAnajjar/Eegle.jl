@@ -31,7 +31,9 @@ const EXAMPLE_Epilepsy_1_sensors = joinpath(@__DIR__, "..", "data_examples", "Cl
 
 export  Eegle,
         EXAMPLE_P300_1,
-        EXAMPLE_MI_1
+        EXAMPLE_MI_1,
+        EXAMPLE_Epilepsy_1,
+        EXAMPLE_Epilepsy_1_sensors,
 
 include("FileSystem.jl");       @reexport using .FileSystem
 include("Miscellaneous.jl");    @reexport using .Miscellaneous
