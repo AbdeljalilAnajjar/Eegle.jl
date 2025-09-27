@@ -1,15 +1,15 @@
 # Tutorial SA 1
 
-A stannard task in the analysis of continuous EEG recording is to compute the average power spectrum.
+A standard task in the analysis of continuous EEG recording is to estimate the *power spectral density*.
 
-This tutorial uses the example normative EEG file provided with **Eegle** and shows how to
+This tutorial uses the [EXAMPLE_Normative_1](@ref) example normative EEG file provided with **Eegle** and shows how to
 
 1. Read the example file (in ASCII text format) and associated file of sensor labels
 2. Compute the spectra with the [Welch method](https://en.wikipedia.org/wiki/Welch%27s_method)
 3. Plot the spectra
 
 !!! info
-    As an example of possible options for computing spectra, it is shown how to use the [Hann](https://en.wikipedia.org/wiki/Hann_function) tapering window and the [Slepian](https://en.wikipedia.org/wiki/Slepian_function) multi-tapering windows. For other options see the 
+    As an example of possible options for computing spectra, it is shown how to use the [Hann](https://en.wikipedia.org/wiki/Hann_function) tapering window or the [Slepian](https://en.wikipedia.org/wiki/Slepian_function) multi-tapering windows. For other options see the 
     [spectra](https://marco-congedo.github.io/FourierAnalysis.jl/dev/spectra/#FourierAnalysis.spectra) function. 
 
 ---
@@ -20,9 +20,9 @@ Tell julia the package to be used
 using Eegle, FourierAnalysis, GLMakie, Colors
 ```
 
-Load the example normative file (eyes-closed) and the associated sensor labels file.
+Load the example file and the associated sensor labels file.
 
-This is a 80s recording on a 20yo woman. The sampling rate and number of electrodes are 128 and 19, respectively. Data have been previously high-passed at 1.5 Hz. The following functions are in module **Eegle** module [InOut.jl](@ref).
+This is a 80s recording on a 20yo woman. The sampling rate and number of electrodes are 128 and 19, respectively. Data have been previously high-passed at 1.5 Hz. The following functions are in **Eegle** module [InOut.jl](@ref).
 
 ```julia
 X = readASCII(EXAMPLE_Normative_1)
@@ -30,8 +30,8 @@ X = readASCII(EXAMPLE_Normative_1)
 sensors = readSensors(EXAMPLE_Normative_1_sensors)
 ```
 
-Compute amplitude spectra (square root of the power spectra) using the Welch method (50% overlapping sliding window),
-with 0.5 Hz frequency resolution (`fr`), applying the Hann tapering windows.
+Compute amplitude spectra (square root of the power spectra) using the Welch method (50% overlapping sliding window,
+which is the default), with 0.5 Hz frequency resolution (`fr`), applying the Hann tapering windows.
 
 ```julia
 sr, fr, ne = 128, 2, length(sensors)
@@ -41,7 +41,7 @@ S = spectra(X, sr, sr*fr;
             func = √) # any function can be used here
 ```
 
-Select the spectra from 1.5 (`minf`) to 32 Hz (`maxf`). The function `f2b` tells us what bin in the spectra corresponds to `minf` and `maxf`.
+Select the spectra from 1.5 (`minf`) to 32 Hz (`maxf`). The function `f2b` finds the bin in the spectra corresponding to `minf` and `maxf`.
 The data is retrieved as the .y field of [Spectra](https://marco-congedo.github.io/FourierAnalysis.jl/dev/spectra/#Spectra) object `S`.
 
 ```julia
@@ -51,7 +51,7 @@ maxb = f2b(maxf, sr, sr*fr)
 S_ = S.y[minb:maxb, :]
 ```
 
-Plot the spectra using GLMakie.jl. The figure will open in a new window. It is resizable and can be inspected, by zooming and panning (right mouse click). Use CTRL+click to reset the plot. Click on a legend element to identify the spectra
+Plot the spectra using GLMakie.jl. The figure will open in a new window. It is resizable and can be inspected, by zooming and panning (right mouse click). Use CTRL+click to reset the plot. Click on a legend element to toggle its visibility.
 
 ```julia
 begin  
@@ -99,11 +99,11 @@ save("spectra.png", fig; px_per_unit = 300/96)
 
 ![Figure 1](../assets/Fig1_Tutorial_Spectral_Analysis_1.jpg)
 
-For using slepiang multi-tapering instead:
+For using Slepian multi-tapering instead:
 
 ```julia
 S = spectra(X, sr, sr*fr; 
-            tapering=slepians(sr, sr*fr, 1.5),
+            tapering = slepians(sr, sr*fr, 1.5),
             func = √)
 ```
 

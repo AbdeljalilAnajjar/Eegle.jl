@@ -17,19 +17,19 @@ Tutorials are organized by theme; start with those that most closely resemble yo
 # Themes
 
 |Theme| Uses|
-|:---|:---|
+|:----|:----|
 | [Spectral Analysis](@ref) | traditional spectral analysis of EEG based on FFT |
 | [Machine Learning](@ref) | typically used in the field of brain-Computer interface |
 
 ## Spectral Analysis
-|Tutorial | Description|
-|:---|:---|
-|[Tutorial SA 1](@ref) | Read an EEG file in ASCII text format; compute and plot the spectra using the Welch (sliding windows) method |
+|Tutorial  | Description|
+|:----|:----|
+|[Tutorial SA 1](@ref) | read an EEG file; compute and plot the spectra using the Welch (sliding windows) method |
 
 ## Machine Learning
-|Tutorial | Description|
-|:---|:---|
-|[Tutorial ML 1](@ref) | Select [databases](@ref "database") and [sessions](@ref "session"); run a cross-validation for all of them |
+|Tutorial  | Description|
+|:----|:-_--|
+|[Tutorial ML 1](@ref) | relect [databases](@ref "database") and [sessions](@ref "session"); run a cross-validation for all of them |
 
 
 
