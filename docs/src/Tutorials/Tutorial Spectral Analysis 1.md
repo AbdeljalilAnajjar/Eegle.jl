@@ -9,7 +9,7 @@ This tutorial uses the [EXAMPLE_Normative_1](@ref) example normative EEG file pr
 3. Plot the spectra
 
 !!! info
-    As an example of possible options for computing spectra, it is shown how to use the [Hann](https://en.wikipedia.org/wiki/Hann_function) tapering window or the [Slepian](https://en.wikipedia.org/wiki/Slepian_function) multi-tapering windows. For other options see the 
+    As an example of possible options for computing spectra, it is shown how to use the [Hann](https://en.wikipedia.org/wiki/Hann_function) tapering window or the [Slepian](https://en.wikipedia.org/wiki/Slepian_function) multi-taper window. For other options see the 
     [spectra](https://marco-congedo.github.io/FourierAnalysis.jl/dev/spectra/#FourierAnalysis.spectra) function. 
 
 ---
@@ -108,3 +108,7 @@ S = spectra(X, sr, sr*fr;
 ```
 
 ![Figure 2](../assets/Fig1_Tutorial_Spectral_Analysis_2.jpg)
+
+Note that the spectra obtained using the Slepian windows are smoother and have larger lobes,
+due to the fact that they reduce the variance of the estimator at the expenses of the main lobe 
+band-width.
