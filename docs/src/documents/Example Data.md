@@ -22,7 +22,7 @@ Eyes-close resting-state continuous EEG recording acquired on a 20yo healthy wom
 - amplifier: *Mitsar-EEG-201* (Mitsar Co. Ltd., St. Petersburg, Russia)
 - channels: 19 standard Ag/AgCl electrodes (10-20 international system)
 - sampling rate: 128 samples per second
-- Pre-processing: high-pass filter at 1.5 Hz and manually de-artefaction using the Eureka3! software (Nova Tech EEG, Inc., Mesa, AZ, USA)
+- pre-processing: high-pass filter at 1.5 Hz and manually de-artefaction using the Eureka3! software (Nova Tech EEG, Inc., Mesa, AZ, USA)
 - duration: 80s.
 
 This file is accompanied by file `EXAMPLE_Normative_1_sensors.txt` holding the sensor labels.
