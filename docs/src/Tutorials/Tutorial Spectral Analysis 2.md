@@ -26,22 +26,24 @@ Load the example MI file by means of the `readNY` function of the **Eegle** [InO
 o = Eegle.readNY(EXAMPLE_MI_1)
 ```
 
-`o` holds a structure with the data (`o.X`) and metadata, such as
+Variable `o` holds a structure with the data (`o.X`) and metadata, such as
 - sampling rate: `o.sr`,
+- trial duration: `o.wl`,
 - sensor labels: `o.sensors`,
 - class labels: `o.clabels`.
 
 Next, create an utility function to extract the EEG data of the trials for
 a given `sensor`, for each class separately. For this, use the
 `trials` function of the [ERPs.jl](@ref) module.
-The file comprises trials from three classes, with serial number, number of trials and label
-such as:
+The file comprises trials from three classes, as it follows:
 
-- 1, 20, "right_hand", 
-- 2, 20, "feet", 
-- 3, 20, "rest".
+|Class Tag  | Class Label| Number of Trials |
+|:----|:----|:----|
+|1 | right_hand | 20|
+|2 | feet | 20|
+|3 | rest | 20|
 
-A call to this function will therefore generate a vector of three elements, one for each class, each one holding
+A call to the following function will therefore generate a vector of three elements, one for each class, each one holding
 20 vectors, one for each trial, each one holding the trial data at the sought electrode. 
 
 ```julia
@@ -53,11 +55,12 @@ t(o::EEG, sensor::String) =
 
 Next, compute power spectra for sensor "C3" and "Cz" at all trials
 and classes using:
+- 1 Hz frequency resolution (the window length (`wl`) is set equal to the sampling rate)
 - the Welch method (93.75% overlapping sliding `wl`-long windows)
-- 1 Hz frequency resolution (`wl` is set equal to the sampling rate)
 - the default Harris4 tapering window.
 
 ```julia
+wl = o.sr
 C3S = [spectra(c, o.sr, wl; slide=o.sr÷16) for c ∈ t(o, "C3")]
 CzS = [spectra(c, o.sr, wl, slide=o.sr÷16) for c ∈ t(o, "Cz")]
 ```
@@ -110,6 +113,6 @@ save("spectra.png", fig, px_per_unit = 300/96)
 
 ![Figure 1](../assets/Fig1_Tutorial_Spectral_Analysis_2.jpg)
 
-The expected ERD (Event-Related Desynchronization) related to right-hand movement imaging is expected to be better visible at electrode "C3", which is located near the contro-lateral motor cortex. The effect of the ERDs is seen as a lower power during "right hand' trials as compared to "rest".
+The expected ERD (Event-Related Desynchronization) related to right-hand movement imaging is expected to be better visible at electrode "C3", which is located near the contralateral sensorimotor cortex. The effect of the ERDs is seen as a lower power during "right hand' trials as compared to "rest" trials.
 
-Similarly, the expected effect of the "feet" ERD is seen at midline electrode "Cz", which is the closest to the foot area of the sensory-motor cortex.
+Similarly, the expected effect of the "feet" ERD is seen at midline electrode "Cz", which is the closest to the foot area of the sensorimotor cortex.
