@@ -24,7 +24,9 @@ Tutorials are organized by theme; start with those that most closely resemble yo
 ## Spectral Analysis
 |Tutorial  | Description|
 |:----|:----|
-|[Tutorial SA 1](@ref) | read an EEG file; compute and plot the spectra using the Welch (sliding windows) method |
+|[Tutorial SA 1](@ref) | compute and plot power spectra on continuous EEG recording |
+|[Tutorial SA 2](@ref) | compute and plot power spectra on particular EEG epochs (e.g., experimental trials) |
+
 
 ## Machine Learning
 |Tutorial  | Description|

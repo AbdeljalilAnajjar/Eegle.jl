@@ -6,7 +6,7 @@ This tutorial uses the [`EXAMPLE_Normative_1`](@ref) example normative EEG file 
 
 1. read the example file (in ASCII text format) and associated file of sensor labels
 2. compute the spectra with the [Welch method](https://en.wikipedia.org/wiki/Welch%27s_method)
-3. plot the spectra
+3. plot the spectra.
 
 !!! info
     As an example of possible options for computing spectra, it is shown how to use the [Hann](https://en.wikipedia.org/wiki/Hann_function) tapering window or the [Slepian](https://en.wikipedia.org/wiki/Slepian_function) multi-taper window. For other options see the 
@@ -48,7 +48,7 @@ Compute amplitude spectra (square root of the power spectra) using;
                 func = √) # any function can be used here
 ```
 
-Select the spectra from 1.5 (`minf`) to 32 Hz (`maxf`). The function `f2b` finds the bin in the spectra corresponding to `minf` and `maxf`.
+Select the spectra from 1.5 (`minf`) to 32 Hz (`maxf`). The function `f2b` in package **FourierAnalysis.jl** finds the bin in the spectra corresponding to `minf` and `maxf`.
 The data is retrieved as the .y field of [Spectra](https://marco-congedo.github.io/FourierAnalysis.jl/dev/spectra/#Spectra) object `S`.
 
 ```julia
@@ -116,7 +116,7 @@ For using Slepian multi-tapering, you would use instead
 
 and the spectra would be
 
-![Figure 2](../assets/Fig1_Tutorial_Spectral_Analysis_2.jpg)
+![Figure 2](../assets/Fig2_Tutorial_Spectral_Analysis_1.jpg)
 
 Note that the spectra obtained using the Slepian windows are smoother and have larger lobes,
 due to the fact that they reduce the variance of the estimator at the expenses of the main lobe 
