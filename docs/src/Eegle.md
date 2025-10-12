@@ -48,7 +48,7 @@ In this case, however, you must install DSP.jl as well.
 | [DSP](https://github.com/JuliaDSP/DSP.jl) | Julia standard package for digital signal processing|
 | [FourierAnalysis](https://github.com/Marco-Congedo/FourierAnalysis.jl) | FFT-based frequency domain and time-frequency domain analysis |
 | [LinearAlgebra](https://bit.ly/2W5Wq8W) | Julia standard package for matrix types and linear algebra (BLAS, LAPACK)  |
-| [NPZ](https://github.com/fhs/NPZ.jl)| support for the *NPZ* (NumPy) bynary data format |
+| [NPZ](https://github.com/fhs/NPZ.jl)| support for the *NPZ* (NumPy) binary data format |
 | [PermutationTests](https://github.com/Marco-Congedo/PermutationTests.jl) | low-level statistics, very fast (multiple comparison) permutation tests |
 | [PosDefManifold](https://github.com/Marco-Congedo/PosDefManifold.jl) |  more linear algebra, operations on the manifold of positive-definite matrices|
 | [PosDefManifoldML](https://github.com/Marco-Congedo/PosDefManifoldML.jl) |  machine learning on the manifold of positive-definite matrices |
@@ -93,7 +93,7 @@ Julia is a just-in-time compiled, column-major, 1-based indexing language.
 In practice, for using this package, this means that:
 - The first time you execute a function, it will be compiled. From the second on, it will go fast
 - EEG data are organized in ``T×N`` matrices, where ``T`` and ``N`` denotes the number of samples and channels, respectively
-- `for` loops starts at 1. For indexing in Julia, whenever possible, you should use [eachindex](https://docs.julialang.org/en/v1/base/arrays/#Base.eachindex).
+- `for` loops starts at 1. For indexing loops in Julia, whenever possible, you should use [eachindex](https://docs.julialang.org/en/v1/base/arrays/#Base.eachindex).
 
 ### ℍ and the ℍVector type
 
@@ -105,6 +105,8 @@ Reading this documentation on [typecasting matrices](https://marco-congedo.githu
 can turn useful.
 
 ## How to Contribute
+
+The reminder of this page is of interest only for contributing code and documentation.
 
 ### Code conventions
 
@@ -154,7 +156,7 @@ using Eegle
 - When a function has more then two arguments and optional keyword arguments (kwargs), they are given as a list 
     and their possible values, whenever relevant, as a sub-list 
 - Enclose functions, arguments and optional keyword arguments in backticks, which print like this: `mean`
-- Use acronym and refer to the [Acronyms](@ref) section, e.g., [BSS](@ref "Acronyms")
+- Use acronym and link them to the [Acronyms](@ref) section, e.g., [BSS](@ref "Acronyms")
 - Do not confuse the em dash hyphen — (a long dash used in text punctuation) with the usual en dash, used, for example, to make lists in markdown.
 - Only the last item of a list or sub-list should end with a dot
 - The first word of the title of admonitions ('tip', 'warning', etc.) is capitalized, unless it is a function or argument.

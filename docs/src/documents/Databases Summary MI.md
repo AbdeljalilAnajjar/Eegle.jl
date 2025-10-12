@@ -19,4 +19,4 @@
 | Weibo2014 | None | 10 | 1 | 60 | Ag/AgCl | 5 | LH, RH, F, R, BH | (70, 80) | 200 | 800 | 600 |
 | Zhou2016 | None | 4 | 3 | 14 | N/A | 3 | LH, RH, F | (45, 60) | 250 | 1250 | 0 |
 
-Legend: LH = LH; `right_hand` = RH; , `feet` = F, , `both-hands` = BH, `tongue`= T; `rest` = R
+Legend: LH = LH; `right_hand` = RH; , `feet` = F, , `both_hands` = BH, `tongue`= T; `rest` = R

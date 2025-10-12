@@ -36,6 +36,8 @@ When you need a function, check its documentation and the examples given therein
 ## Contributors: 
 
 [Alexandre Bleuzé](https://www.linkedin.com/in/alexandre-bleuz%C3%A9-069b37154/)
+Fahim Doumi
+
 
 ## TroubleShoothing
 | Problem   | Solution |

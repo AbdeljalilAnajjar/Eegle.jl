@@ -26,15 +26,12 @@ Load the example MI file by means of the `readNY` function of the **Eegle** [InO
 o = Eegle.readNY(EXAMPLE_MI_1)
 ```
 
-Variable `o` holds a structure with the data (`o.X`) and metadata, such as
+Variable `o` holds an [`EEG`](@ref) structure with the data (`o.X`) and metadata, such as
 - sampling rate: `o.sr`,
 - trial duration: `o.wl`,
 - sensor labels: `o.sensors`,
 - class labels: `o.clabels`.
 
-Next, create an utility function to extract the EEG data of the trials for
-a given `sensor`, for each class separately. For this, use the
-`trials` function of the [ERPs.jl](@ref) module.
 The file comprises trials from three classes, as it follows:
 
 |Class Tag  | Class Label| Number of Trials |
@@ -43,19 +40,22 @@ The file comprises trials from three classes, as it follows:
 |2 | feet | 20|
 |3 | rest | 20|
 
+Next, create an utility function to extract the EEG data of the trials for
+a given `sensor`, for each class separately. For this, use the
+`trials` function of the [ERPs.jl](@ref) module.
+
 A call to the following function will therefore generate a vector of three elements, one for each class, each one holding
-20 vectors, one for each trial, each one holding the trial data at the sought electrode. 
+20 vectors, one for each trial, each one holding the trial data at the sought electrode (`e`). 
 
 ```julia
-t(o::EEG, sensor::String) = 
-    trials(o.X, o.mark, o.wl; 
-            shape=:byClass, 
-            linComb=findfirst(==(sensor), o.sensors))
+t(eeg, sensor) = trials(eeg.X, eeg.mark, eeg.wl; 
+                        shape=:byClass, 
+                        linComb=findfirst(==(sensor), eeg.sensors))
 ```
 
-Next, compute power spectra for sensor "C3" and "Cz" at all trials
+Compute power spectra for sensor "C3" and "Cz" at all trials
 and classes using:
-- 1 Hz frequency resolution (the window length (`wl`) is set equal to the sampling rate)
+- 1 Hz frequency resolution (the window length `wl` is set equal to the sampling rate)
 - the Welch method (93.75% overlapping sliding `wl`-long windows)
 - the default Harris4 tapering window.
 
