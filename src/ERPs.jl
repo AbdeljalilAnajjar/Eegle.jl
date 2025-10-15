@@ -378,8 +378,8 @@ Optionally, multiply them by `weights` and compute a linear combination across s
 - `weights`: optional weights to be multiplied to the trials. Adaptive weights can be obtained passing the [`Eegle.ERPs.trialsWeights`](@ref) function.
 
 !!! warning "Weights normalization"
-    If you provide custom weights, `weights` must have the same shape as `mark`, that is, it must be a vector of as many vectors of real numbers as classes of stimulations,
-    each one holding the weights for the corresponding class, and the mean of the weights for each class must be 1.
+    If custom weights are provided, `weights` must have the same shape as `mark`, that is, it must be a vector of as many vectors as classes of stimulations,
+    each one holding the weights (real numbers) for the corresponding class. The mean of the weights for each class must be 1.
 
 - `linComb`: Optional linear combination to be applied to the trials, e.g., a spatial filter. It can be:
     - an integer: extract for each (weighted) trial only the data at the electrode indexed by `linComb` ``∈[1,..,n]`` (linear combination by a one-hot vector)
@@ -392,9 +392,10 @@ Optionally, multiply them by `weights` and compute a linear combination across s
 - if `shape` == `:cat` (default): all trials or the linear combinations thereof concatenated in a single vector.
 
 Each extracted trial is a ``wl×N`` matrix if `linComb` is `nothing` (default), 
-otherwise it a vector ``wl`` elements holding the linear combination.
+otherwise it a vector of ``wl`` elements holding the linear combination.
 
-Empty marker vectors are ignored if `shape` is equal to `:cat`, otherwise an empty vector is returned in their corresponding positions.
+!!! note "Empty marker vectors"
+    Empty marker vectors are ignored if `shape` is equal to `:cat`, otherwise an empty vector is returned in their corresponding positions.
 
 **Examples**
 ```julia
@@ -422,7 +423,7 @@ f = randn(o.ne)
 # extract the filtered trials
 𝐗 = trials(o.X, mark, o.sr; linComb = f)
  
-# `𝐗[1]`, `𝐗[2]`, ... are vectors in this case tools
+# `𝐗[1]`, `𝐗[2]`, ... are vectors in this case too
 
 # extract the trials in separated vectors for each class
 𝐗 = trials(o.X, mark, o.sr; shape=:byClass)
@@ -467,7 +468,7 @@ trials( X::Matrix{R}, mark::Vector{Vector{S}}, wl::S;
 """
 ```julia
     function trialsWeights( X::Matrix{R}, 
-                            stimOrMark::Union{Vector{S}, Vector{Vector{S}}}, 
+                            mark::Vector{Vector{S}},
                             wl::S;
         M::Union{Matrix{R}, Nothing} = nothing,
         offset::S = 0) 
@@ -480,19 +481,17 @@ The method is unsupervised, i.e., agnostic to class labels,
 but a supervised version is available using the `M` arguments.
 
 !!! tip "Mean ERPs"
-    You don't need this function to compute weighted mean ERPs, as this function is called by [`mean`](@ref).
+    This function is not needed to compute weighted mean ERPs, as this function is called by [`mean`](@ref).
 
 **Arguments**
 
 - `X`: the whole EEG recording, a matrix of size ``T×N``, where ``T`` is the number of samples and ``N`` the number of channels (sensors), respectively
-- `stimOrMark`: either a [stimulation vector](@ref) or [marker vectors](@ref). For empty mark vectors, an empty vector is returned
+- `mark`: the [marker vectors](@ref). For empty vectors, an empty vector is returned
 - `wl`: the window (trial or ERP) length in samples.
 
 **Optional Keyword Arguments**
 
-- `M`: (defalut = `nothing`)
-    - if `stimOrMark` is a stimulation vector and a matrix is passed as `M`, then the weights are computed as the inverse of the squared norm of ``X_j-M`` for all trials ``X_j``, ``j \\in \\{1, \\ldots, k\\}``, regardless their class
-    - if `stimOrMark` are marker vectors and a vector of ``z`` matrices is passed as `M`, then the weights are computed as the inverse of the squared norms of ``X_{j(i)}-M_i`` for all trials  ``X_{j(i)}``, ``j \\in \\{1, \\ldots, k\\}``, ``i \\in \\{i, \\ldots, z\\}`` for each class ``i`` separately.
+- `M`: if it is a vector holding `z` matrices of size ``T×N``, where `z` is the number of vectors in `mark` (classes of stimulations), then the weights are computed as the inverse of the squared norms of ``X_{j(i)}-M_i`` for all trials  ``X_{j(i)}``, ``j \\in \\{1, \\ldots, k\\}``, ``i \\in \\{i, \\ldots, z\\}`` for each class ``i`` separately.
 - `offset`: see [offset](@ref).
 
 **Examples**
@@ -510,6 +509,11 @@ weights = trialsWeights(o.X, o.mark, o.wl)
 # check that the mean of weights within each class is 1
 mean(weights[1])
 mean(weights[2])
+
+# Supervised weights using the mean ERPs
+M = mean(o.X, o.wl, o.mark; overlapping=true, weights=:a)
+weights = trialsWeights(o.X, o.mark, o.wl; M) 
+# for the keyword argument, in Julia `M`, it is the same as `M=M`
 ```
 """
 function trialsWeights(X::Matrix{R}, mark::Vector{Vector{S}}, wl::S;
