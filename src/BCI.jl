@@ -44,6 +44,7 @@ export  covmat,
         covtype = LShrLW,
         prototype::Union{AbstractMatrix, Nothing} = nothing,
         standardize::Bool = false,
+        lags::Int = 0,
         useBLAS::Bool = true,
         threaded::Bool = true,
         reg::Symbol = :rmt,
@@ -73,6 +74,7 @@ Covariance matrix estimation(s) of:
     - or any estimator from the [CovarianceEstimation.jl](https://github.com/mateuszbaran/CovarianceEstimation.jl) package.
 - `prototype`: optional matrix to be stacked to the data matrix (or matrices) to form a super-trial — see *Appendix I* in [Congedo2017Review](@cite). Default = `nothing`
 - `standardize`: if true, standardize the data matrix(ces) (global mean = 0 and global sd = 1 for each matrix) before estimating the covariance. Default = `false`
+- `lags` : if > 0, embed `lags` lags by calling the [`Eegle.Preprocessing.embedLags`](@ref) function. No lags are embedded by default.
 - `useBLAS`: optimize the SCM covariance computations using BLAS. Default = `true`
 - `threaded`: enable multi-threading across the ``k`` matrices. For (2) only. Default = `true`
 - Only for M-estimators:
@@ -119,6 +121,7 @@ function covmat(X::AbstractMatrix{T};
                 covtype = LShrLW,
                 prototype::Union{AbstractMatrix, Nothing} = nothing,
                 standardize::Bool = false,
+                lags::Int = 0,
                 useBLAS::Bool = true,
                 threaded::Bool = true, # not used. included for homogeneity with the other method
                 reg::Symbol = :rmt,
@@ -131,7 +134,7 @@ function covmat(X::AbstractMatrix{T};
     transform = standardize ? Eegle.Preprocessing.standardizeEEG : identity
 
     if (covtype==SCM && useBLAS) # fast computations of the sample covariance matrix
-        Y = isnothing(prototype) ? transform(X) : [transform(X) prototype]
+        Y = isnothing(prototype) ? transform(embedLags(X, lags)) : [transform(embedLags(X, lags)) prototype]
         den = 1.0/size(Y, 1)
         if BLAS.get_num_threads()==1
             return size(Y, 2) < 64 ? ℍ(BLAS.gemm('T', 'N', Y, Y)*den) : ℍ((Y'*Y)*den)
@@ -139,11 +142,12 @@ function covmat(X::AbstractMatrix{T};
             return ℍ(BLAS.gemm('T', 'N', Y, Y)*den)
         end
     elseif covtype == :Tyler
-        return tme(X'; tol, maxiter, verbose) # tme takes a wide matrix
+        return tme(embedLags(X, lags)'; tol, maxiter, verbose) # tme takes a wide matrix
     elseif covtype == :nrTyler
-        return nrtme(X'; reg, tol, maxiter, verbose) # nrtme takes a wide matrix
+        return nrtme(embedLags(X, lags)'; reg, tol, maxiter, verbose) # nrtme takes a wide matrix
     else # any other estimator
-        return ℍ(CovarianceEstimation.cov(covtype, isnothing(prototype) ? transform(X) : [transform(X) prototype]))
+        return ℍ(CovarianceEstimation.cov(covtype, isnothing(prototype) ? transform(embedLags(X, lags)) : 
+                                                                        [transform(embedLags(X, lags)) prototype]))
     end
 end
 
@@ -152,6 +156,7 @@ function covmat(𝐗::AbstractVector{<:AbstractArray{T}};
                 covtype = LShrLW, 
                 prototype::Union{AbstractMatrix, Nothing}=nothing, 
                 standardize::Bool = false, 
+                lags::Int = 0,
                 useBLAS:: Bool = true,
                 threaded::Bool = true, # for homogeneity with the other method
                 reg::Symbol = :rmt,
@@ -161,19 +166,15 @@ function covmat(𝐗::AbstractVector{<:AbstractArray{T}};
 
     T<:Complex && covtype≠SCM && throw(ArgumentError("Eegle.BCI, function `covmat`: for complex data only `covtype=SCM` is supported"))
 
-    transform = standardize ? Eegle.Preprocessing.standardizeEEG : identity
-    
-    defineTrial(i, prototype) = isnothing(prototype) ? transform(𝐗[i]) : [transform(𝐗[i]) prototype]
-
     𝐂 = PosDefManifold.HermitianVector(undef, length(𝐗))
 
     if threaded 
         @threads for i ∈ eachindex(𝐗) 
-            𝐂[i] = covmat(𝐗[i]; covtype, prototype, standardize, useBLAS, reg, tol, maxiter, verbose)
+            𝐂[i] = covmat(𝐗[i]; covtype, prototype, standardize, lags, useBLAS, reg, tol, maxiter, verbose)
         end
     else
         @simd for i ∈ eachindex(𝐗) 
-            @inbounds 𝐂[i] = covmat(𝐗[i]; covtype, prototype, standardize, useBLAS, reg, tol, maxiter, verbose)
+            @inbounds 𝐂[i] = covmat(𝐗[i]; covtype, prototype, standardize, lags, useBLAS, reg, tol, maxiter, verbose)
         end
     end
 
@@ -191,6 +192,7 @@ end
         weights = :a,
         pcadim::Int = 8,
         standardize::Bool = false,
+        lags::Int = 0,
         tikh :: Union{Real, Int} = 0,
         useBLAS :: Bool = true,
         threaded = true,
@@ -212,7 +214,7 @@ For details, see *Appendix I* in [Congedo2017Review](@cite).
     - for `:ERP`, prototypes for all classes are stacked and covariance is computed on super-trials
     - for `:P300`, only the target class prototype is stacked
     - for `:MI`, no prototype is used; covariance is computed on the trial as it is.
-- `covtype`, `standardize`, `useBLAS`, `reg`, `tol`, `maxiter` and `verbose` — see [`Eegle.BCI.covmat`](@ref), to which they are passed.
+- `covtype`, `standardize`, `lags`, `useBLAS`, `reg`, `tol`, `maxiter` and `verbose` — see [`Eegle.BCI.covmat`](@ref), to which they are passed.
 - `targetLabel`: label of the target class (for P300 paradigm only). By default is "target", following the conventions of the FII corpus.
 - `overlapping`: for prototype mean ERP estimations (ERP/P300 only). Default = false:
     - if true, use multivariate regression
@@ -245,6 +247,7 @@ function encode(o::EEG;
         weights = :a,
         pcadim::Int = 8,
         standardize::Bool = false,
+        lags::Int = 0,
         tikh :: Union{Real, Int} = 0,
         useBLAS :: Bool = true,
         threaded = true,
@@ -257,8 +260,15 @@ function encode(o::EEG;
 
     paradigm ∉ (:ERP, :P300, :MI) && throw(ArgumentError("Eegle.BCI, function `encode`: The `paradigm` must be one of the following symbols: :ERP, :P300, :MI. If you did not pass this argument, it means the paradigm stored in the `o` EEG structure is not supported by `encode`"))
 
-    args = (covtype=covtype, standardize=standardize, useBLAS=useBLAS, threaded=threaded, 
-            reg=reg, tol=tol, maxiter=maxiter, verbose=verbose)
+    args = (covtype=covtype, 
+            standardize=standardize, 
+            lags=lags,
+            useBLAS=useBLAS, 
+            threaded=threaded, 
+            reg=reg, 
+            tol=tol, 
+            maxiter=maxiter, 
+            verbose=verbose)
 
     if paradigm==:ERP
         # multivariate regression or arithmetic average ERP mean for ALL CLASSES with data-driven weights
@@ -266,6 +276,7 @@ function encode(o::EEG;
         𝐘=Eegle.ERPs.mean(o.X, o.wl, o.mark; overlapping, weights)
         labels=sort(unique(o.stim))[2:end]
         for (l, Y) in enumerate(𝐘)
+            # multiply mean by √#trials to recover the amplitude in the original unit
             𝐘[l]*=sqrt(count(x->x==labels[l], o.stim))
             standardize && (𝐘[l] = Eegle.Preprocessing.standardizeEEG(𝐘[l]))
             if 0<pcadim<o.ne
@@ -273,7 +284,7 @@ function encode(o::EEG;
             end
         end
 
-        Y=hcat(𝐘...) # stack all class ERP means
+        Y=hcat(𝐘...) # stack horizontally all class ERP means
         
         return tikh≈0 ? covmat(o.trials; prototype=Y, args...) : 
                 PosDefManifoldML.transform!(covmat(o.trials; prototype=Y, args...), Tikhonov(tikh; threaded))
@@ -413,7 +424,7 @@ with the results of the cross-validation, otherwise a 2-tuple holding this `CVre
 using Eegle
 
 # Using the example files provided by Eegle.
-# Avarege accuracy is reported in square brackets
+# Averege accuracy is reported in square brackets
 
 # a) P300 data: standard pipeline (MDM classifier)
 crval(EXAMPLE_P300_1; bandPass = (1, 24)) # [0.711]
@@ -425,7 +436,7 @@ crval(EXAMPLE_P300_1; bandPass = (1, 24), seed = 1234) # [0.685]
 args = (bandPass = (1, 24), upperLimit = 1)
 crval(EXAMPLE_P300_1; args...) # [0.723]
 
-## b) using a 5-fold cross-validation
+## b) using a 5-fold cross-validation (instead of 8-fold default)
 crval(EXAMPLE_P300_1, MDM(); nFolds=5, args...) # [0.702]
 
 ## b) using the Log-Euclidean metric for the MDM classifier
@@ -433,10 +444,7 @@ crval(EXAMPLE_P300_1, MDM(logEuclidean); args...) # [0.663]
 
 ## b) with artifact rejection and pre-conditioning
 pipeline = @→ Recenter(; eVar=0.999) → Compress → Shrink(Fisher)
-crval(EXAMPLE_P300_1; pipeline, args...) # [0.719]
-
-## b) using SVM model in the tangent space (TS)
-crval(EXAMPLE_P300_1, SVM(); args...) # [0.719]
+crval(EXAMPLE_P300_1, MDM(Euclidean); pipeline, args...) # [0.719]
 
 ## b) using a Ridge logistic regression model in the tangent space (TS)
 crval(EXAMPLE_P300_1, ENLR(; alpha = 0); args...) # [non-deterministic]
@@ -453,11 +461,11 @@ crval(EXAMPLE_P300_1, ENLR(); meanISR=I, args...) # [non-deterministic]
 # c) Motor Imagery data: standard pipeline (MDM classifier) with 
 # artifact rejection, using classes "feet" and "right_hand"
 args = (bandPass = (8, 32), upperLimit = 1, classes=["feet", "right_hand"])
-crval(EXAMPLE_MI_1; args...) # [0.833]
+crval(EXAMPLE_MI_1; args...) # [0.74]
 
 ## c) with a very fast pre-conditioning
 pipeline = @→ Recenter → Equalize
-crval(EXAMPLE_MI_1; pipeline, args...) # [0.865]
+crval(EXAMPLE_MI_1, MDM(Euclidean); pipeline, args...) # [0.729]
 
 ...
 

@@ -281,7 +281,7 @@ end
     where T<:Real 
 ```
 Lag embedding (or delay embedding) is a technique to augment the data. Second-order statistics of the augmented data, that is, covariance or cross-spectral matrices,
-hold information not only of volume condution and instantaneous connectivity, but also of lagged connectivity.
+hold information not only of volume conduction and instantaneous connectivity, but also of lagged connectivity.
 These matrices can be used, for example, in blind source separation
 and Riemannian classification. 
 
@@ -290,6 +290,8 @@ dynamical systems by means of
 [recurrence analysis](https://github.com/JuliaDynamics/RecurrenceAnalysis.jl) — see package 
 [DelayEmbeddings.jl](https://github.com/JuliaDynamics/DelayEmbeddings.jl) for advanced
 delay embedding techniques.
+
+If `lags` = 0 (default), return `X` (no lag embedding).
 
 **Tutorials** xxx, xxx
 
