@@ -33,7 +33,10 @@ Tutorials are organized by theme; start with those that most closely resemble yo
 ## Machine Learning
 |Tutorial  | Description|
 |:----|:----|
-|[Tutorial ML 1](@ref) | relect [databases](@ref "database") and [sessions](@ref "session"); run a cross-validation for all of them |
+|[Tutorial ML 1](@ref) | run a cross-validation comparing two Riemannian classifiers |
+|[Tutorial ML 2](@ref) | select [databases](@ref "database") and [sessions](@ref "session"); run a cross-validation for all of them |
+
+
 
 
 
