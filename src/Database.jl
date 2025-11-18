@@ -305,8 +305,6 @@ function infoNYdb(dbDir)
 
     if nwarnings > 0
         println(separatorFont, "\n⚠ Be careful, $nwarnings warnings have been found", defaultFont)
-    else
-        println(greyFont, "\n✓ All sanity checks passed", defaultFont)
     end
 
     # Create infoDB structure
@@ -397,7 +395,8 @@ function selectDB(rootDir       :: String,
         classes     :: Union{Vector{String}, Nothing} = 
                         paradigm == :P300 ? ["target", "nontarget"] : nothing,
         minTrials   :: Union{Int, Nothing} = nothing,
-        summarize   :: Bool = true)
+        summarize   :: Bool = true,
+        verbose     :: Bool = false)
 ```
 Select BCI databases pertaining to the given BCI paradigm. Optionally, each [session](@ref) of the selected databases 
 is scrutinized to meet the provided inclusion criteria. 
@@ -423,6 +422,7 @@ the `infoDB.files` field lists the included sessions only.
 
 - `minTrials`: the minimum number of trials for all classes in the sessions to be included. 
 - `summarize`: if true (default) a summary table of the selected databases is printed in the REPL.
+- `verbose` : if true print some feedback (in addition to the summary table)
 
 **Examples**
 ```julia
@@ -434,14 +434,16 @@ selectedDB = selectDB(.../directory_to_start_searching/, :MI;
 selectedDB = selectDB(.../directory_to_start_searching/, :MI;
                       classes = ["rest", "both_hands", "feet"],
                       minTrials = 50,
-                      summarize = false)
+                      summarize = false,
+                      verbose = true)
 ```
 """
 function selectDB(rootDir       :: String,
                   paradigm      :: Symbol;
                   classes       :: Union{Vector{String}, Nothing} = paradigm == :P300 ? ["target", "nontarget"] : nothing,
                   minTrials     :: Union{Int, Nothing} = nothing,
-                  summarize     :: Bool = true)
+                  summarize     :: Bool = true,
+                  verbose       :: Bool = false)
     
     paradigm ∉ (:MI, :P300, :ERP) && error("Eegle.Database, function `selectDB`: Unsupported paradigm. Use :MI, :P300 or :ERP")
     
@@ -465,7 +467,7 @@ function selectDB(rootDir       :: String,
     # Normalize classes to lowercase for comparison
     norm_classes = isnothing(classes) ? nothing : lowercase.(classes)
    
-    println("Searching for $(paradigm) databases" * 
+    verbose && println("Searching for $(paradigm) databases" * 
         (isnothing(classes) ? " (no class filter)" : " containing: $(join(classes, ", "))"))
     
     @inbounds for dbDir in dbDirs
@@ -532,13 +534,17 @@ function selectDB(rootDir       :: String,
     join(["\n  Database: $dbName" * join(["\n    • $(basename(file))" for file in files], "") 
           for (dbName, files) in excluded_files_info], ""))
    
-    println("\n$(repeat("═", 50))")
-    println("✓ $(length(selectedDB)) database(s) selected (Database - Condition):")
-    for db in selectedDB
-        println("  • $(db.dbName) - $(db.condition)")
-    end
-    println(repeat("═", 50))
+    println()
 
+    if verbose
+        println("\n$(repeat("═", 50))")
+        println("✓ $(length(selectedDB)) database(s) selected (Database - Condition):")
+        for db in selectedDB
+            println("  • $(db.dbName) - $(db.condition)")
+        end
+        println(repeat("═", 50))
+    end
+    
     # Create summary table if requested
     if summarize
         summary_data = []

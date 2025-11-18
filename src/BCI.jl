@@ -131,7 +131,7 @@ function covmat(X::AbstractMatrix{T};
 
     T<:Complex && covtype≠SCM && throw(ArgumentError("Eegle.BCI, function `covmat`: for complex data only `covtype=SCM` is supported"))
 
-    transform = standardize ? Eegle.Preprocessing.standardizeEEG : identity
+    transform = standardize ? Eegle.Preprocessing.standardize : identity
 
     if (covtype==SCM && useBLAS) # fast computations of the sample covariance matrix
         Y = isnothing(prototype) ? transform(embedLags(X, lags)) : [transform(embedLags(X, lags)) prototype]
@@ -278,7 +278,7 @@ function encode(o::EEG;
         for (l, Y) in enumerate(𝐘)
             # multiply mean by √#trials to recover the amplitude in the original unit
             𝐘[l]*=sqrt(count(x->x==labels[l], o.stim))
-            standardize && (𝐘[l] = Eegle.Preprocessing.standardizeEEG(𝐘[l]))
+            standardize && (𝐘[l] = Eegle.Preprocessing.standardize(𝐘[l]))
             if 0<pcadim<o.ne
                 𝐘[l]=𝐘[l]*eigvecs(CovarianceEstimation.cov(SimpleCovariance(), 𝐘[l]))[:, o.ne-pcadim+1:o.ne] # PCA to keep only certain components
             end
@@ -298,7 +298,7 @@ function encode(o::EEG;
         # multivariate regression or arithmetic average TARGET ERP mean with data-driven weights
         # multiplied by the square root of the # of target trials to recover the amplitude
         Y=Eegle.ERPs.mean(o.X, o.wl, o.mark; overlapping, weights)[TargetIndex]*sqrt(count(x->x==TargetIndex, o.stim))
-        standardize && (Y = Eegle.Preprocessing.standardizeEEG(Y))
+        standardize && (Y = Eegle.Preprocessing.standardize(Y))
         if 0<pcadim<o.ne
             Y=Y*eigvecs(CovarianceEstimation.cov(CovarianceEstimation.SimpleCovariance(), Y))[:, o.ne-pcadim+1:o.ne] # PCA to keep only certain components
         end
