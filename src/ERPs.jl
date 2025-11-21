@@ -578,7 +578,8 @@ where:
 - ``m`` is the mean of the ``2wl`` central values of ``v``, taken as a robust central tendency estimator
 - ``u`` is [kwarg](@ref "Acronyms") `upperlimit` (default=1.2).
 
-All trials in which at least one sample of the log-FRMS exceeds ``h`` or in which ``l`` exceeds the log-FRMS are rejected.
+All trials in which at least one sample of the log-FRMS exceeds ``h`` (there are samples with over-threshold amplitude) 
+or in which ``l`` exceeds the log-FRMS all over the trial (almost zero everywhere) are rejected.
 
 **Return**
 - if `returnDetails` is false (default), a 5-tuple holding the following objects:
