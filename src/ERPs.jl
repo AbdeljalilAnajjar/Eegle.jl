@@ -630,12 +630,12 @@ function reject(X::Matrix{R}, stim::Vector{Int}, wl::S;
     thrUp = m+((m-thrDown)*upperLimit) # upper limit
     #println("thrUp: ", thrUp)
    
-    # argument code added 4 Avril 2025 to read MI files with arbitrary label numbers (not just 1, 2, 3...)
-    classcode=sort(unique(stim))[2:end] 
-    stim_to_index = Dict(val => i for (i, val) in enumerate(classcode)) # CREATE MAPPING TO AVOID INDEX ERROR 
+    # classcode added 4 Avril 2025 to read BCI files with arbitrary label numbers (not just 1, 2, 3...)
+    classcode=sort(unique(stim))[2:end] # only tags starting at 1
+    stim_to_index = Dict(val => i for (i, val) in enumerate(classcode)) # create mapping to avoid index erros
 
     # reject epochs of wl samples starting at a sample whose frms<thrDown
-    # this reject trials with samples with no signal (almost zero everywhere)
+    # this reject trials where all samples have no signal (almost zero everywhere)
     skipUntil=0
     @inbounds for s=1:ns-wl+1
         s<skipUntil && continue
@@ -646,7 +646,7 @@ function reject(X::Matrix{R}, stim::Vector{Int}, wl::S;
         end
     end
 
-    # reject epochs of wl samples starting at a sample whose frms>thrUp
+    # reject epochs of wl samples whenever there is a sample whose frms>thrUp
     skipUntil=0
     @inbounds for s=1:ns-wl+1
         s<skipUntil && continue
@@ -669,13 +669,12 @@ function reject(X::Matrix{R}, stim::Vector{Int}, wl::S;
 
     if returnDetails
         return cleanstim, rejecstim, cleanmark, rejecmark, rejected, fmrs, m, thrDown, thrUp
-
     else
         return cleanstim, rejecstim, cleanmark, rejecmark, rejected
     end
 end
 
-#xxx
+# TOUT DOUX
 # Analytic Signal of a vector of vectors of data vectors `𝐓`.
 # RETURN the corresponding vector of vectors of FourierAnalysis.jl
 # TFanalyticsignal object.
