@@ -609,7 +609,7 @@ norm((R[1].+R[2]).-stim)==0 # should be true
 
 **Tutorials**
 
-xxx
+[Tutorial ML 1](@ref), [Tutorial ML 2](@ref)
 """
 function reject(X::Matrix{R}, stim::Vector{Int}, wl::S;
                 offset::S = 0,
