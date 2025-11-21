@@ -85,20 +85,20 @@ The average accuracy across folds has raised from 0.792 to 0.885 with the settin
 
 ---
 
-Now, let us appreciate what the function `crval` does for us by performing the cross-validation in a step-by-step manner:
+Now, let us appreciate what the function [`crval`](@ref) does for us by performing the cross-validation in a step-by-step manner:
 
-**a** - load the data
+**a** - load the data:
 ```julia
 o = readNY(EXAMPLE_MI_1; args...)
 ```
 
-**b** - encode the EEG trials, which are stored in o.trials, as covariance matrices
+**b** - encode the EEG trials, which are stored in o.trials, as covariance matrices:
 ```julia
 C = covmat(o.trials; covtype = SCM)
 Cl = covmat(o.trials; covtype = SCM, lags = 10)
 ```
 
-**c** - call the `crval` function of package [PosDefManifoldML](https://github.com/Marco-Congedo/PosDefManifoldML.jl)
+**c** - call the `crval` function of package [PosDefManifoldML](https://github.com/Marco-Congedo/PosDefManifoldML.jl):
 ```julia
 cv2 = crval(MDM(), C, o.y)
 cvl2 = crval(MDM(), Cl, o.y; pipeline) # in julia, `pipeline` is the same as `pipeline=pipeline`

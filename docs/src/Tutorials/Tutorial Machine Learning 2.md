@@ -86,7 +86,7 @@ for (db, DB) ∈ enumerate(DBs), (f, file) ∈ enumerate(DB.files)
 end
 ```
 
-For all possible options in running cross-validations, see [`crval`](@ref).
+For all possible options in running cross-validations, see [`Eegle.BCI.crval`](@ref).
 
 !!! tip
     Do not use Julia's `@threaded` macro in the internal loops above as by default function `crval` is already multi-threaded across folds.
