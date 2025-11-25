@@ -41,7 +41,7 @@ NPZ = "0.4"
 PermutationTests = "0.2"
 PosDefManifold = "0.5"
 PosDefManifoldML = "0.5"
-PrettyTables = "2.4"
+PrettyTables = "2.4, 3.1"
 Reexport = "1.2"
 Revise = "3.8"
 Statistics = "1.11"
@@ -55,4 +55,3 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Statistics", "LinearAlgebra", "Test"]
-
