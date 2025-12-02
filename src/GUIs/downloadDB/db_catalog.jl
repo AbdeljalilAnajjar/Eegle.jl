@@ -10,8 +10,10 @@ struct DBMeta
 end
 
 # Local paths to Eegle’s internal folder and to the file storing the corpus location.
-const EegleDir = joinpath(homedir(), ".julia", "packages", "Eegle")
-const FII_BCI_CORPUS_PATHFILE = joinpath(EegleDir, "FII-BCI Corpus.txt")
+# DEPOT_PATH[1] is where the .julia flder is on the PC
+#const EegleDir = joinpath(homedir(), ".julia", "packages", "Eegle")
+const EegleDir = joinpath(DEPOT_PATH[1], "packages", "Eegle")
+const FII_BCI_CORPUS_PATHFILE = joinpath(EegleDir, "FII_BCI_Corpus.txt")
 
 # Zenodo API URLs for MI and P300 files.
 const MIpath = "https://zenodo.org/api/records/17670014/files" 

@@ -13,7 +13,7 @@ include("db_catalog.jl")
 include("styles.jl")
 
 
-# Launches the interactive GUI to browse, filter and download databases from the FII-BCI corpus.
+# Launches the interactive GUI to browse, filter and download databases from the FII BCI corpus.
 function _downloadDB()
 
     app = App() do session
@@ -152,7 +152,7 @@ function _downloadDB()
 
         return DOM.div( D.FlexCol(
             DOM.br(),
-            D.Title(" 📥 Eegle GUI: download the FII-BCI corpus", style = title_style),
+            D.Title(" 📥 Eegle GUI: download the FII BCI Corpus", style = title_style),
             DOM.br(),
             D.FlexRow(
                 D.Card(D.FlexCol(D.Title("Database options"), dropdown, mintrials, (c.cb for c in checkbox_widgets)..., "Current location on PC: ", path_chosen_by_user, path_button, overwrite_checkbox, download_button)),
