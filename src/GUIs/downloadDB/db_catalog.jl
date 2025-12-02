@@ -222,4 +222,10 @@ function write_in_Eegle_package(download_path, overwrite)
 end
 
 # Returns the stored corpus path from Eegle’s internal configuration file.
-dirDB() = readlines(FII_BCI_CORPUS_PATHFILE)[1]
+function _dirFII() 
+    file = FII_BCI_CORPUS_PATHFILE
+    isfile(file) || (return nothing)
+    path = readlines(FII_BCI_CORPUS_PATHFILE)[1]
+    isdir(path) || (return nothing)
+    return path
+end
