@@ -71,6 +71,9 @@ In this case, however, you must install DSP.jl as well.
 | [YAML](https://github.com/JuliaData/YAML.jl)| support for the *YAML* data format |
 | [Reexport](https://github.com/simonster/Reexport.jl)| for development: julia macro to re-export symbols |
 | [Revise](https://github.com/timholy/Revise.jl)| for development: automatically update function definitions in a running Julia session |
+| [ZipFile](https://github.com/fhs/ZipFile.jl)| support for reading and writing ZIP archives in Julia |
+| [Bonito](https://github.com/SimonDanisch/Bonito.jl)| build interactive web applications, dashboards, and visualizations entirely in Julia |
+| [NativeFileDialog](https://github.com/JuliaGraphics/NativeFileDialog.jl)| for opening native OS dialogues for selecting files |
 | [Test](https://github.com/JuliaLang/julia/tree/master/stdlib/Test)| for development: Julia standard library for integrating package testing |
 
 ### Other resources
