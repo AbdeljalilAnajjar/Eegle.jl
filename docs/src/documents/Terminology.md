@@ -25,4 +25,13 @@ It is a unique individual performing an experiment. A subject may provide one or
 ## database
 It is a collection of [sessions](@ref "session") recorded under experimental conditions held as constant as possible on one or more subjects. 
 
-Typically, the number of sessions does not need to match the number of unique [subjects](@ref "subject"), that is, the number of sessions per subject may be different. We require that all sessions in a database have at least the following experimental parameters held constant: number of classes, trial duration, number of electrodes, type of electrodes, EEG amplifier. The interface should also be fixed as well as paradigm-specific experimental parameters, such as inter-stimulus interval and flash duration for P300, experimental instructions for MI, etc. Since in general experiments are carried out to manipulate experimental conditions, a single experiment will typically result in as many databases as experimental conditions. From a statistical point of view, these precautions make the sessions within the same database as homogeneous as possible, allowing to consider the accuracy achieved in those sessions as random samples drawn from the same population. This is important if any conclusions are to be drawn comparing the accuracy results between databases, e.g., between experimental conditions, and also if the databases are treated as observation units in comparing pipelines, as it is currently done in [MOABB](https://moabb.neurotechx.com/docs/index.html).
+Typically, the number of sessions does not need to match the number of unique [subjects](@ref "subject"), that is, the number of sessions per subject may be different. We require that all sessions in a database have at least the following experimental parameters held constant: 
+- number of classes, 
+- trial duration, 
+- number of electrodes, 
+- type of electrodes, 
+- EEG amplifier,
+- sampling rate,
+- temporal filtering. 
+
+The interface should also be fixed as well as paradigm-specific experimental parameters, such as inter-stimulus interval and flash duration for P300, experimental instructions for MI, etc. Since in general experiments are carried out to manipulate experimental conditions, a single experiment will typically result in as many databases as experimental conditions. From a statistical point of view, these precautions make the sessions within the same database as homogeneous as possible, allowing to consider the accuracy achieved in those sessions as random samples drawn from the same population. This is important if any conclusions are to be drawn comparing the accuracy results between databases, e.g., between experimental conditions, and also if the databases are treated as observation units in comparing pipelines, as it is currently done in [MOABB](https://moabb.neurotechx.com/docs/index.html).

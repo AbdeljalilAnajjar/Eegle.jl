@@ -415,9 +415,9 @@ the `infoDB.files` field lists the included sessions only.
     If a folder with the same name of the paradigm (for example: "MI") is found in `corpusDir`, the search starts therein
     and not in `corpusDir`. This way you can use the same `corpusDir` for all paradigms.
 
-    !!! tip "Point to the FII BCI Corpus"
+    !!! note "Point to the FII BCI Corpus"
     If you have downloaded the FII BCI Corpus using the provided GUI — see [`downloadDB`](@ref) —, you can simply
-    omit this argument; Eegle will search within the FII BCI Corpus directory.
+    omit this argument; **Eegle** will automatically search within the FII BCI Corpus directory.
 
 - `paradigm`: the BCI paradigm to be used. Supported paradigms at this time are: `:P300`, `:ERP` or `:MI`.
 
@@ -427,8 +427,8 @@ the `infoDB.files` field lists the included sessions only.
     - for the **MI** and **ERP** paradigm there is no inclusion criterion based on class labels by default.
 
 !!! note "Class labels for MI" 
-    In the FII BCI corpus, available **MI** class labels are: "left_hand", "right_hand", "feet", "rest", "both_hands", and "tongue".
-    Available **P300** class labels are always the same two: "target" and "nontarget".
+    In the FII BCI corpus, available **MI** class labels are: *left_hand*, *right_hand*, *feet*, *rest*, *both_hands*, and *tongue*.
+    Available **P300** class labels are always the same two: *target* and *nontarget*.
 
 - `minTrials`: the minimum number of trials for all classes in the sessions to be included. 
 - `summarize`: if true (default) a summary table of the selected databases is printed in the REPL.
@@ -716,22 +716,22 @@ end
 function downloadDB()
 
 (2) 
-function downloadDB(url::String, dest::String = DEFAULT_DOWNLOAD_DIR)
+function downloadDB(url::String, dest::String = homedir())
 
 (3) 
-function downloadDB(urls::Vector{String}, dest::String = DEFAULT_DOWNLOAD_DIR)
+function downloadDB(urls::Vector{String}, dest::String = homedir())
 ```
-(1) Interactive GUI mode
+(1) **Interactive GUI mode**
 
 Open an interactive GUI to select and download databases from the FII BCI Corpus.
 The GUI will open in the primary HTML display found in the Julia display stack, which typically
-is VS Code or the default web-browser.
+is VS Code if you use it or the default web-browser.
 
 ![Figure GUI_downloadDB](assets/GUI_downloadDB.png)
 
 Once a BCI paradigm is selected (MI or P300), the following inclusion criteria can be selected:
 - the minimum number of trials per class
-- yhe motor imagery classes (for MI paradigm only) 
+- the motor imagery classes (for MI paradigm only) 
 
 The table on the right lists the available databases given the current inclusion criteria.
 
@@ -750,15 +750,15 @@ A progress indicator is displayed in the REPL throughout the download and extrac
     Once the corpus is downloaded, **Eegle** knows automatically where to find it. Therefore, omitting the argument `corpusDir` while using function [`Eegle.Database.selectDB`](@ref)
     will automatically point to the FII BCI corpus.
 
-(2) Direct download of a single [Zenodo](https://zenodo.org/) record.
+(2) **Direct download of a single [Zenodo](https://zenodo.org/) record**
 
 Argument `url` must point to a Zenodo record page (e.g. "https://zenodo.org/records/17670014").
 
-All files associated with the record are downloaded into folder `dest`.
+All files associated with the record are downloaded into folder `dest` (the home dir by default).
 
 A progress indicator is displayed in the REPL throughout the download and extraction process.
 
-(3) Direct download of several Zenodo records.
+(3) **Direct download of several Zenodo records**
 
 This is the same as (2), but for a vector of Zenodo record URLs.
 

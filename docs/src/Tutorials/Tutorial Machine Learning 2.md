@@ -20,20 +20,12 @@ The tutorial shows how to
 
 ---
 
-Tell julia you want to use the **Eegle** package and where to look for the databases on your computer.
-
-```julia
-using Eegle 
-
-DBdir = joinpath(homedir(), "Documents", "My Data", "EEG data", "BCI Databases", "NY");
-```
-
-Select all motor imagery databases in the FII BCI corpus featuring the "feet" and "right_hand" class. 
+Select all motor imagery databases in the *FII BCI Corpus* featuring the "feet" and "right_hand" class. 
 Within these databases, select the sessions featuring at least 30 trials for each of these classes — see [selectDB](@ref).
 
 ```julia
 classes = ["feet", "right_hand"];
-DBs = selectDB(DBdir, :MI; classes, minTrials = 30);
+DBs = selectDB(:MI; classes, minTrials = 30);
 ```
 
 Create memory to store all accuracies.
@@ -71,7 +63,7 @@ Perform the cross-validation on all available P300 databases and on all sessions
 ```julia
 P300acc = [zeros(length(DB.files)) for DB ∈ DBs];
 
-DBs = selectDB(DBdir, :P300; minTrials = 25);
+DBs = selectDB(:P300; minTrials = 25);
 
 for (db, DB) ∈ enumerate(DBs), (f, file) ∈ enumerate(DB.files)
     # perform cross-validation (using Eegle)

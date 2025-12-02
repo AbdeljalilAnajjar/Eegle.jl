@@ -26,21 +26,27 @@ For the details on the treatment that has been carried out on each database, see
 
 # Inclusion and Exclusion Criteria
 
-Databases have been extracted from MOABB[^1] and comprise exclusively data collected on non-clinical populations.
+Databases have been extracted from MOABB[^1], excluding those recorded on clinical populations.
+
+If a database included several experimental conditions, it was split so as to result in one database per condition (see [database](@ref "database" for the rationale).
 
 Motor Imagery databases contain various classes, sometimes including paradigm-specific movements (e.g., compound movements). Only databases that included at least two of these following standard classes were selected: 
 
 `left_hand` → 1, `right_hand` → 2, `feet` → 3, `rest` → 4, `both_hands` → 5, `tongue` → 6
 
-If additional classes were available, they have been excluded. 
+If classes not included in the above list were available, they have been excluded. 
 
 P300 databases always contain only two classes: 
 
 `nontarget` → 1, `target` → 2
 
-These class prevalence must maintain a high nontarget/target ratio for optimal P300 response elicitation. The typical ratio is 5:1. Databases with other rations were excluded.
+These class prevalence must maintain a high nontarget/target ratio for optimal P300 response elicitation. The typical ratio is 5:1. Databases with other ratios were excluded.
 
-Here is the complete list of the selected databases in the V3 of the corpus:
+The above numbering of classes has been used across all databases.
+
+Here below is the complete list of the selected databases in the V3 of the corpus.
+
+For summary tables of databases for each paradigm, see [Summary of P300 Databases](@ref) and [Summary of MI Databases](@ref).
 
 ### Motor Imagery databases
 
@@ -70,8 +76,6 @@ Here is the complete list of the selected databases in the V3 of the corpus:
 - Cattan2019[^22]: separated into 2 different databases (Cattan2019-PC and Cattan2019-VR) due to different experimental conditions
 - EPFLP300[^23]: separated into 6 different databases (EPFLP300-1, EPFLP300-2, EPFLP300-3, EPFLP300-4, EPFLP300-5, and EPFLP300-6) due to different experimental conditions
 - Lee2019ERP[^9]: separated into 2 different databases (Lee2019ERP-Test and Lee2019ERP-Train) due to different experimental conditions
-
-For summary tables of databases for each paradigm, see [Summary of P300 Databases](@ref) and [Summary of MI Databases](@ref).
 
 ## BCI DB References
 
