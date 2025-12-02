@@ -9,6 +9,9 @@ using NPZ, YAML, HDF5, EzXML, DataFrames
 
 using Eegle.FileSystem
 
+# code for the GUI to download the FII BCI Corpus (called by `DownloadDB`)
+include(joinpath("GUIs", "downloadDB", "DB_download_interface.jl"))
+
 #=
 # ? ¤ CONTENT ¤ ? #
 
@@ -17,6 +20,7 @@ loadNYdb        | return a list of .npz files in a directory (this is considered
 infoNYdb        | print and return information about a database (infoDB structure)
 selectDB        | select database folders based on paradigm and class requirements
 weightsdb       | get weights for each session of a database for statistical analysis
+downloadDB      | run a GUI to download the FII BCI corpus
 
 =#
 
@@ -26,7 +30,6 @@ const separatorFont = "\x1b[35m"
 const defaultFont   = "\x1b[0m"
 const greyFont      = "\x1b[90m"
 
-
 import Eegle
 
 export
@@ -34,7 +37,8 @@ export
     loadNYdb, 
     infoNYdb,
     selectDB,
-    weightsDB
+    weightsDB,
+    downloadDB
 
 
 """
@@ -676,6 +680,86 @@ function weightsDB(files)
 
     return _weightsDB(subject, length(files))
 end
+
+
+"""
+```julia
+
+(1) 
+function downloadDB()
+
+(2) 
+function downloadDB(url::String, dest::String = DEFAULT_DOWNLOAD_DIR)
+
+(3) 
+function downloadDB(urls::Vector{String}, dest::String = DEFAULT_DOWNLOAD_DIR)
+```
+(1) Interactive GUI mode
+
+Open an interactive GUI to select and download databases from the FII BCI Corpus.
+The GUI will open in the primary HTML display found in the Julia display stack, which typically
+is VS Code or the default web-browser.
+
+![Figure GUI_downloadDB](assets/GUI_downloadDB.png)
+
+Once a BCI paradigm is selected (MI or P300), the following inclusion criteria can be selected:
+- mintrials: minimum number of trials per class
+- motor imagery classes (for MI paradigm only) 
+
+The table on the right lists the available databases given the current inclusion criteria.
+
+The "Choose path" button allows to select the folder where the selected databases are to be downloaded (default: homedir()).
+
+If the the "Overwrite existing data" check box is checked (default), existing files in the download directory are deleted (suggested, as a new version of the the FII BCI corpus may be available).
+
+The GUI automatically downloads the databases, extracts their contents, and removes the ZIP archives, as soon as the "Download Now" button is pressed.
+
+A progress indicator is displayed in the REPL throughout the download and extraction process.
+
+!!! warning "Paradigms"
+    The databases pertaining to the MI and P300 paradigm must be downloaded separately.
+
+!!! tip "Using the FII BCI Corpus"
+    Once the corpus is downloaded, **Eegle** knows automatically where to find it. Therefore, omitting the argument `corpusDir` while using function [`Eegle.Database.selectDB`](@ref)
+    will automatically point to the FII BCI corpus.
+
+(2) Direct download of a single Zenodo record.
+
+`url` must point to a Zenodo record page (e.g. "https://zenodo.org/records/17670014").
+
+All files associated with the record are downloaded into folder `dest`.
+
+A progress indicator is displayed in the REPL throughout the download and extraction process.
+
+(3) Direct download of several Zenodo records
+
+Same as (2), but for a vector of Zenodo record URLs.
+
+
+**Examples**
+```julia
+downloadDB()
+
+downloadDB("https://zenodo.org/records/17670014")
+
+downloadDB(["url1", "url2"], "/path/to/folder")
+```
+"""
+function downloadDB()
+    _downloadDB()
+end
+
+
+function downloadDB(url::String, dest::String = DEFAULT_DOWNLOAD_DIR)
+    _downloadDB(url, dest)
+end
+
+
+function downloadDB(urls::Vector{String}, dest::String = DEFAULT_DOWNLOAD_DIR)
+    _downloadDB(urls, dest)
+end
+
+
 
 
 # overwrite the Base.show function to nicely print information
