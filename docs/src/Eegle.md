@@ -83,14 +83,17 @@ In this case, however, you must install DSP.jl as well.
 
 ### related to Eegle
 
-[Eegle-Tools](https://github.com/FhmDmi/Eegle-Tools): a collection of useful scripts.
+|  Resource | Scope |
+|:-----------------------|:-----------------------|
+| [Eegle-Tools](https://github.com/FhmDmi/Eegle-Tools) | a collection of useful scripts used to develop Eegle or using Eegle  |
+
 
 ### similar packages
 
 There are many other Julia's packages that can be useful for EEG data analysis and classification.
 Here is a non-exhaustive list:
 
-|  Package | Scope |
+|  Resource | Scope |
 |:-----------------------|:-----------------------|
 | [Julia Neuro](https://julianeuro.github.io/packages) | a collection of packages gor Neuroscience data  |
 | [RecurrenceAnalysis.jl](https://github.com/JuliaDynamics/RecurrenceAnalysis.jl) | recurrence plots and recurrence quantification analysis |
