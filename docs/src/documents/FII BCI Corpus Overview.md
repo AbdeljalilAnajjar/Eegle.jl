@@ -1,6 +1,6 @@
 # FII BCI Corpus Overview
 
-This document outlines the rationale and content of the **FII BCI Corpus** Zenodo repositories for [Motor Imagery](https://zenodo.org/records/17305330) (MI) and [P300](https://zenodo.org/records/17305306) BCI paradigm. Those are selections of BCI databases, annotated and curated for research purposes in a collaborative project carried out at *University Federico II of Naples* and *University Grenoble Alpes of Grenoble*.
+This document outlines the rationale and content of the **FII BCI Corpus** Zenodo repositories for [Motor Imagery (MI)](https://doi.org/10.5281/zenodo.17801878) and [P300](https://doi.org/10.5281/zenodo.17250465) BCI paradigm. Those are selections of BCI databases, annotated and curated for research purposes in a collaborative project carried out at *University Federico II of Naples* and *University Grenoble Alpes of Grenoble*.
 
 The corpus can be easily installed using **Eegle**'s download GUI — see [`Eegle.Database.downloadDB`](@ref).
 
@@ -8,19 +8,19 @@ Along with EEG data and class labels, the corpus provides comprehensive metadata
 
 The data curation included:
 - discarding EEG recordings 
+    - flagged by the database authors as problematic
     - holding corrupted data (e.g., NaN values during the trials)
     - yielding numerical problems with standard data manipulations procedures
-    - flagged by the database authors as problematic
     - offering close-to-chance performance in standard 2-class prediction tasks,
 - conversion of data into *µ*V with Float32 precision,
 - class re-labeling using a standardized scheme,
 - downsampling (if applicable) to ≤ 256 samples per second preventing aliasing,
 - removal of non-EEG channels, such as EOG, EMG, reference, or ground electrodes,
 - concatenation of runs from the same session with identical experimental condition,
-- cleaning of NaN and zero values at the beginning of the recordings,
+- cleaning of NaN and zero values at the beginning and ending of the recordings,
 - conversion of the cleaned data from CSV to the [NY format](@ref), easily accessible in any programming language.
 
-For the details on the discarding procedures for each file see the *@discarded.md* file for [MI](https://zenodo.org/records/17670014/files/discarded.md?download=1) and [P300](https://zenodo.org/records/17305306/files/deprecated.md?download=1).
+For the details on the discarding procedures for each file see the *@discarded.md* file for [MI](https://zenodo.org/records/17801878/files/@discarded.md?download=1) and [P300](https://zenodo.org/records/17793672/files/@discarded.md?download=1).
 
 For the details on the treatment that has been carried out on each database, see [Treatment MI](@ref) and [Treatment P300](@ref).
 
@@ -28,15 +28,15 @@ For the details on the treatment that has been carried out on each database, see
 
 Databases have been extracted from MOABB[^1], excluding those recorded on clinical populations.
 
-If a database included several experimental conditions, it was split so as to result in one database per condition (see [database](@ref "database" for the rationale).
+If a database included several experimental conditions, it was split so as to result in one database per condition (see [database](@ref) "database" for the rationale).
 
-Motor Imagery databases contain various classes, sometimes including paradigm-specific movements (e.g., compound movements). Only databases that included at least two of these following standard classes were selected: 
+Motor Imagery databases contain various classes, sometimes including paradigm-specific movements (e.g., compound movements). Only databases that included at least two of these following standard classes were selected:
 
 `left_hand` → 1, `right_hand` → 2, `feet` → 3, `rest` → 4, `both_hands` → 5, `tongue` → 6
 
-If classes not included in the above list were available, they have been excluded. 
+If classes not included in the above list were available, they have been excluded.
 
-P300 databases always contain only two classes: 
+P300 databases always contain only two classes:
 
 `nontarget` → 1, `target` → 2
 
@@ -61,6 +61,7 @@ For summary tables of databases for each paradigm, see [Summary of P300 Database
 - PhysionetMI[^10]: separated into 2 different databases (PhysionetMI-T2 and PhysionetMI-T4) due to different experimental conditions
 - Schirrmeister2017[^11]
 - Shin2017A[^12]
+- SPSM2025[^24]
 - Weibo2014[^13]
 - Zhou2016[^14]
 
@@ -125,3 +126,4 @@ For summary tables of databases for each paradigm, see [Summary of P300 Database
 
 [^23]: Hoffmann U, Vesin JM, Ebrahimi T, Diserens K. An efficient P300-based brain-computer interface for disabled subjects. J Neurosci Methods. 2008 Jan 15;167(1):115-25. doi: 10.1016/j.jneumeth.2007.03.005. Epub 2007 Mar 13. PMID: 17445904.
 
+[^24]: Arpaia P, Esposito A, Galasso E, Galdieri F, Natalizio A. A wearable brain-computer interface to play an endless runner game by self-paced motor imagery. J Neural Eng. 2025 Mar 26;22(2). doi: 10.1088/1741-2552/adc205. PMID: 40101362.

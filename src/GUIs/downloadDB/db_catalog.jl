@@ -16,8 +16,8 @@ const EegleDir = joinpath(DEPOT_PATH[1], "packages", "Eegle")
 const FII_BCI_CORPUS_PATHFILE = joinpath(EegleDir, "FII_BCI_Corpus.txt")
 
 # Zenodo API URLs for MI and P300 files.
-const MIpath = "https://zenodo.org/api/records/17670014/files" 
-const P300path = "https://zenodo.org/api/records/17305306/files"
+const MIpath = "https://zenodo.org/api/records/17801878/files" 
+const P300path = "https://zenodo.org/api/records/17793672/files"
 
 
 # Available MI and P300 class labels in the corpus.

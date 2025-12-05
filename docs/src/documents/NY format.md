@@ -18,7 +18,7 @@ NY files in **Eegle** are read using function [`readNY`](@ref), which creates an
 
 ## Converters
 
-All scripts for data conversion between formats (Base repository/MOABB to CSV and CSV to NY), tailored to each dataset's requirements, are available in the 'Converters' folder and in a [GitHub repository](https://github.com/FhmDmi/BCI-Databases).
+All scripts for data conversion between formats (Base repository/MOABB to CSV and CSV to NY), tailored to each dataset's requirements, are available in the 'Converters' folder and in a [GitHub repository](https://github.com/FhmDmi/Eegle-Tools/tree/master/Converters).
 
 The following scripts facilitate the data pre-processing workflow:
 

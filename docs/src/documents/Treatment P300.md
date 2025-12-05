@@ -56,6 +56,7 @@ This document describes all the changes applied to downloaded P300 databases fro
 
 **Specific Treatments:**
 
+- **Data cleaning**: Samples with NaN and/or zero values removed (first and last lines)
 - **Channel merging**: Original file contained separate nontarget and target stimulation channels (both using value 1 at the beginning of the trial). These were merged into a single stimulation channel with standardized labels.
 - **Channel removal**: Event channel and two irrelevant final columns removed
 - **Database separation**:
@@ -112,6 +113,7 @@ This document describes all the changes applied to downloaded P300 databases fro
 
 **Specific Treatments:**
 
+- **Data cleaning**: Samples with NaN and/or zero values removed (first and last lines)
 - **Channel merging**: Original file contained separate nontarget and target stimulation channels (both using value 1 at trial beginning). These were merged into a single stimulation channel with standardized labels.
 - **Database separation**:
   - **bi2012-T**: Offline training session (offline, predefined target sequence)
