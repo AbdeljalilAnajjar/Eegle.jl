@@ -1,6 +1,6 @@
 # Treatment P300
 
-This document describes all the changes applied to downloaded P300 databases from MOABB.
+This document describes all the changes applied to downloaded P300 databases from MOABB or base repository.
 
 ## BNCI2014009
 

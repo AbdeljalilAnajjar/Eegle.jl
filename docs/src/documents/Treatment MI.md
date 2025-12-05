@@ -1,6 +1,6 @@
 # Treatment MI
 
-This document describes all the changes applied to downloaded Motor Imagery databases from MOABB and base.
+This document describes all the changes applied to downloaded Motor Imagery databases from MOABB or base repository.
 
 ## AlexMI
 
