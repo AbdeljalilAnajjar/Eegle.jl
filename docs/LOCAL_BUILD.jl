@@ -60,6 +60,7 @@ makedocs(;
                 "Treatment P300" => "documents/Treatment P300.md",
                 "NY format"=> "documents/NY format.md",
                 "NY metadata (YAML)" => "documents/yamlstruct.md",
+                "Benchmark" => "documents/Benchmark.md",
             ]
         ],
         "References" => "references.md"

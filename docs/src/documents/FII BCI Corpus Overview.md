@@ -4,7 +4,7 @@ This document outlines the rationale and content of the **FII BCI Corpus** Zenod
 
 The corpus can be easily installed using **Eegle**'s download GUI — see [`Eegle.Database.downloadDB`](@ref).
 
-Along with EEG data and class labels, the corpus provides comprehensive metadata that allow to select the data for the study at hand and extract relevant information. This makes it particularly easy to carry out machine learning research on BCI data — see for example [Tutorial ML 2](@ref).
+Along with EEG data and class labels, the corpus provides comprehensive metadata that allow to select the data for the study at hand and extract relevant information. This makes it particularly easy to carry out machine learning research on BCI data — see for example [Tutorial ML 2](@ref). For comparing results, a [benchmark](@ref "BCI FII Corpus Benchmark") is provided.
 
 The data curation included:
 - discarding EEG recordings 

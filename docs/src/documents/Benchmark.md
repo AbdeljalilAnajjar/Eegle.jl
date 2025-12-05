@@ -1,47 +1,36 @@
 # BCI FII Corpus Benchmark
 
-This document reports the results of a benchmark run on the [FII BCI Corpus](@erf "FII BCI Corpus Overview") using **Eegle**.
+This document reports the results of a benchmark run on the [FII BCI Corpus](@ref "FII BCI Corpus Overview") using **Eegle**.
 
-* Only subjects/sessions that passed the *first three exclusion criteria* described in the *@discarded.md* file for [MI](https://zenodo.org/records/17801878/files/@discarded.md?download=1) and [P300](https://zenodo.org/records/17793672/files/@discarded.md?download=1) were included in this benchmark.
-* Consequently, some sessions exhibit low accuracy scores. These subjects correspond to the *fourth exclusion criterion* mentioned in the *@discarded.md* file. They have been placed in the `/discarded` folder of their respective database and are not good examples to train a machine learning model.
-* Individual subject/session accuracies are documented in the `.yml` files and are available in CSV format in this [GitHub repository](https://github.com/FhmDmi/Eegle-Tools/tree/master/Within-Session-Evaluation/results). Scripts used to make this benchmark and a summary of poor performers are also available there.
-* This document reports the mean(±sd) accuracies for each database according to the analyzed tasks
-    - "right_hand" vs. "feet" and "left_hand" vs. "right_hand" for MI
-    - target vs nontarget for P300.
+Only subjects/sessions that passed *all exclusion criteria* described in the *@discarded.md* file (see it for [MI](https://zenodo.org/records/17801878/files/@discarded.md?download=1) and [P300](https://zenodo.org/records/17793672/files/@discarded.md?download=1)) were included in this benchmark.
+
+Individual subject/session accuracies are included in the `.yml` [metadata files](@ref "NY Metadata (YAML)") and are also available in CSV format in this [GitHub repository](https://github.com/FhmDmi/Eegle-Tools/tree/master/Within-Session-Evaluation/results). The repository also hosts the scripts used to make this benchmark and more information. 
+
+This document reports the mean(±sd) balanced accuracies for each database according to the analyzed tasks:
+    - MI: "right_hand" vs. "feet" and "left_hand" vs. "right_hand" 
+    - P300: target vs nontarget.
 
 ## Available Classifiers
 
-Results are currently available for three Riemannian classifiers:
+The benchmark has employed three Riemannian classifiers, all adopting the affine-invariant (Fisher-Rao) [metric](https://marco-congedo.github.io/PosDefManifold.jl/stable/introToRiemannianGeometry/):
 
-- **MDM** (Minimum Distance to Mean) with Fisher metric
-- **ENLR** (Elastic Net Logistic Regression) with Fisher metric for projecting the data onto the tangent space
-- **Linear SVM** (Linear Support Vector Machine) with Fisher metric for projecting the data onto the tangent space (only for MI databases).
+**Native classifiers** (acting on the manifold); the metric is used for computing distances and barycenters:
+
+- **MDM** (Minimum Distance to Mean).
+
+**Tangent space classifiers**; the metric is used to compute a barycenter for projecting the data onto the tangent space:
+
+- **ENLR** (Elastic Net Logistic Regression) 
+- **Linear SVM** (Linear Support Vector Machine).
 
 ---
 
 ## Processing Pipelines
 
-For details please see the documentation of the [`crval`](@ref) function.
+For both MI and P300 the default pipeline implementd by the [`crval`](@ref) function has bene used with the following two customizations:
 
-### Motor Imagery (MI) Pipeline
-
-1. **Bandpass filter:** 8-32 Hz, forward-backward Butterworth filter of order 4.
-2. [**Automatic artifact rejection:**](https://marco-congedo.github.io/Eegle.jl/dev/ERPs/#Eegle.ERPs.reject) upperLimit = 1.2
-3. **Covariance estimation:** Sample covariance matrix with Tikhonov regularization (λ = 10⁻⁴)
-4. **Cross-validation:** Stratified K-Fold (K=10) using seed = 109 for randomization and reproducibility
-5. **Evaluation:** Balanced accuracy score for each classifier
-
-### P300 Pipeline
-
-1. **Bandpass filter:** 1-24 Hz, forward-backward Butterworth filter of order 4
-2. [**Automatic artifact rejection:**](https://marco-congedo.github.io/Eegle.jl/dev/ERPs/#Eegle.ERPs.reject) upperLimit = 1.2
-3. **Covariance estimation:**
-   - LWF (Ledoit-Wolf-Framework) shrinkage
-   - ERP prototype covariance estimation using super-trial averaging
-   - PCA (Principal Component Analysis) dimensionality reduction to 8 components
-   - Adaptive weights computed as the inverse of the squared Frobenius norm of the trial data
-4. **Cross-validation:** Stratified K-Fold (K=10) using seed = 109 for randomization and reproducibility
-5. **Evaluation:** Balanced accuracy score for each classifier
+- Stratified K-Fold (K=10) instead of the default 8-fold
+- Seed set to 109 (instead of default 1234).
 
 ---
 
@@ -50,31 +39,31 @@ For details please see the documentation of the [`crval`](@ref) function.
 ### Task: right_hand vs. feet
 
 | Database | MDM (%) | ENLR (%) | SVM (%) |
-|----------|---------|----------|---------|
-| AlexMI-None | 73.75 ± 18.03 | 80.62 ± 14.00 | 75.31 ± 13.39 |
-| BNCI2014001-None | 85.13 ± 12.20 | 87.70 ± 9.65 | 86.33 ± 11.05 |
-| BNCI2014002-Test | 78.45 ± 17.49 | 79.17 ± 18.49 | 79.64 ± 16.40 |
-| BNCI2014002-Train | 77.07 ± 11.40 | 77.54 ± 11.38 | 74.07 ± 13.87 |
+|----------|---------|----------|----------|
+| AlexMI-None | 73.75 ± 18.03 | 80.62 ± 14.0 | 75.31 ± 13.39 |
+| BNCI2014001-None | 85.13 ± 12.2 | 87.7 ± 9.65 | 86.33 ± 11.05 |
+| BNCI2014002-Test | 80.77 ± 15.81 | 81.54 ± 16.88 | 81.92 ± 14.58 |
+| BNCI2014002-Train | 77.07 ± 11.4 | 77.54 ± 11.38 | 74.07 ± 13.87 |
 | BNCI2015001-None | 81.62 ± 13.08 | 84.53 ± 10.23 | 78.94 ± 12.42 |
-| Schirrmeister2017-None | 84.08 ± 14.38 | 94.99 ± 7.08 | 95.88 ± 5.65 |
-| Weibo2014-None | 61.19 ± 9.32 | 86.59 ± 8.40 | 81.95 ± 7.88 |
+| Schirrmeister2017-None | 86.13 ± 12.67 | 96.48 ± 4.52 | 97.07 ± 3.62 |
+| Weibo2014-None | 61.94 ± 9.56 | 86.5 ± 8.9 | 81.72 ± 8.32 |
 | Zhou2016-None | 87.33 ± 6.76 | 92.89 ± 3.66 | 87.45 ± 8.41 |
 
 ### Task: left_hand vs. right_hand
 
 | Database | MDM (%) | ENLR (%) | SVM (%) |
-|----------|---------|----------|---------|
+|----------|---------|----------|----------|
 | BNCI2014001-None | 77.75 ± 13.99 | 78.26 ± 15.33 | 78.85 ± 14.27 |
-| BNCI2014004-Test | 76.67 ± 14.43 | 78.45 ± 14.28 | 76.20 ± 14.93 |
-| BNCI2014004-Train | 65.39 ± 10.18 | 67.78 ± 10.27 | 66.31 ± 9.70 |
-| Cho2017-None | 60.61 ± 11.17 | 67.43 ± 13.91 | 65.77 ± 11.02 |
-| GrosseWentrup2009-None | 59.58 ± 8.08 | 83.11 ± 14.08 | 79.81 ± 12.75 |
-| Lee2019_MI-Train | 64.54 ± 13.68 | 76.53 ± 14.74 | 73.25 ± 14.14 |
-| PhysionetMI-Task 2 | 47.62 ± 16.07 | 62.95 ± 18.34 | 57.41 ± 12.00 |
-| SPSM2025-None | 59.82 ± 9.83 | 63.32 ± 10.41 | 58.38 ± 9.46 |
-| Schirrmeister2017-None | 63.85 ± 16.71 | 80.94 ± 14.05 | 79.88 ± 14.32 |
-| Shin2017A-None | 57.96 ± 18.48 | 72.14 ± 20.87 | 68.16 ± 18.78 |
-| Weibo2014-None | 54.98 ± 11.26 | 79.01 ± 13.61 | 73.51 ± 15.96 |
+| BNCI2014004-Test | 78.9 ± 12.41 | 80.95 ± 11.53 | 78.59 ± 12.58 |
+| BNCI2014004-Train | 66.15 ± 9.95 | 68.73 ± 9.74 | 66.92 ± 9.63 |
+| Cho2017-None | 64.96 ± 9.42 | 73.7 ± 10.26 | 69.54 ± 10.07 |
+| GrosseWentrup2009-None | 60.12 ± 8.38 | 86.21 ± 10.73 | 82.23 ± 10.81 |
+| Lee2019_MI-Train | 66.22 ± 13.23 | 79.74 ± 11.64 | 75.35 ± 13.21 |
+| PhysionetMI-Task 2 | 55.1 ± 16.48 | 76.77 ± 11.58 | 62.99 ± 12.83 |
+| SPSM2025-None | 62.49 ± 7.5 | 66.67 ± 7.91 | 60.08 ± 9.14 |
+| Schirrmeister2017-None | 65.26 ± 16.51 | 83.11 ± 11.92 | 82.08 ± 12.21 |
+| Shin2017A-None | 61.67 ± 18.58 | 79.74 ± 15.77 | 73.08 ± 17.46 |
+| Weibo2014-None | 55.14 ± 11.93 | 82.0 ± 10.36 | 74.52 ± 16.58 |
 | Zhou2016-None | 84.52 ± 7.76 | 86.92 ± 8.18 | 82.46 ± 9.31 |
 
 ---
