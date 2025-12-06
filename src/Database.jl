@@ -467,7 +467,7 @@ function selectDB(corpusDir     :: String,
     # Check if there's a paradigm subfolder and move to it if it exists
     paradigmDir = joinpath(corpusDir, string(paradigm))
     isdir(paradigmDir) && (corpusDir = paradigmDir)
-    !isdir(paradigmDir) && error("Eegle.Database, function `selectDB`: the provided directory `corpusDir` is not valid. Please check: $corpusDir") 
+    !isdir(corpusDir) && error("Eegle.Database, function `selectDB`: the provided directory `corpusDir` is not valid. Please check: $corpusDir") 
 
     dbDirs = getFoldersInDir(corpusDir)
     isempty(dbDirs) && error("Eegle.Database, function `selectDB`: No database found in the directory: $corpusDir")
