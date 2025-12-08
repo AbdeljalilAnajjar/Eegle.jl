@@ -736,12 +736,14 @@ Once a BCI paradigm is selected (MI or P300), the following inclusion criteria c
 The table on the right lists the available databases given the current inclusion criteria.
 
 The **Choose path** button allows to select the folder where the selected databases are to be downloaded (default: homedir()).
+Notice that, once you click, the folder selection window may open minimized (check the task bar).
 
 If the **Overwrite existing data** check box is checked (default), existing files in the download directory are deleted (suggested, as a new version of the the FII BCI corpus may be available).
 
 The GUI automatically downloads the databases, extracts their contents, and removes the ZIP archives, as soon as the **Download Now** button is pressed.
 
-A progress indicator is displayed in the REPL throughout the download and extraction process.
+A progress indicator is displayed in the REPL throughout the download and extraction process and a notification
+is printed when the download has ended. You can keep using Julia in the meanwhile.
 
 !!! warning "Paradigms"
     The databases pertaining to the MI and P300 paradigm must be downloaded separately.
@@ -754,7 +756,7 @@ A progress indicator is displayed in the REPL throughout the download and extrac
 
 Argument `url` must point to a Zenodo record page (e.g. "https://zenodo.org/records/17670014").
 
-All files associated with the record are downloaded into folder `dest` (the home dir by default).
+All files associated with the record are downloaded into folder `dest` (the homedir by default).
 
 A progress indicator is displayed in the REPL throughout the download and extraction process.
 

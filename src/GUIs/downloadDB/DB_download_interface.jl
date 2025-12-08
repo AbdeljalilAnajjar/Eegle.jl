@@ -72,7 +72,7 @@ function _downloadDB()
             try
                 t_int = parse(Int64,t)
             catch e
-                @error "Erreur d'entrée: veuillez entrer un entier"
+                @error "Please enter en integer"
             end
             filterDB(p; classes=(cls == [] ? nothing : cls), minTrials=t_int)
         end
@@ -88,9 +88,9 @@ function _downloadDB()
                 folder = pick_folder()
                 if folder !== nothing
                     path_chosen_by_user[] = folder
-                    @info "$(folder) was chosen for data download"
+                    @info "The corpus will be downloaded in $(folder)"
                 else
-                    @warn "No folder was selected"
+                    @info "The corpus will be downloaded in the homedir"
                 end
             end
         end
@@ -111,10 +111,10 @@ function _downloadDB()
                     for db in dbs
                         floder_to_remove = joinpath(path_chosen_by_user[], "BCI_FII_Corpus", string(db.paradigm))
                         if isdir(floder_to_remove)
-                            @info "Removing existing folder: $(floder_to_remove)"
+                            println("Removing existing folder: $(floder_to_remove)")
                             rm(floder_to_remove; force=true, recursive=true)
                         else
-                            @info "No existing data for $(db.name)"
+                            println("No existing data for $(db.name)")
                         end
                     end
                 else
@@ -189,7 +189,8 @@ function _downloadDB(url::String, dest::String = DEFAULT_DOWNLOAD_DIR)
     meta = JSON.parse(String(resp.body))
 
     n = length(meta["files"])
-    print("\rProgress: [", "#"^0, " "^n, "] 0/$(n)")
+    @info "Starting the download of the FII BCI Corpus"
+    print("\rDownload progress: [", "#"^0, " "^n, "] 0/$(n)…")
     flush(stdout)
 
     for (i, file) in enumerate(meta["files"])
@@ -213,10 +214,16 @@ function _downloadDB(url::String, dest::String = DEFAULT_DOWNLOAD_DIR)
             close(reader)
         end
 
-        print("\rProgress: [", "#"^i, " "^(n-i), "] $(i)/$(n)")
+        if i==1 
+            print("\rDownload progress: [", "#"^i, " "^(n-i), "] $(i) database of $(n)…")
+        else
+            print("\rDownload progress: [", "#"^i, " "^(n-i), "] $(i) databases of $(n)…")
+        end
+
         flush(stdout)
     end
-    println("\nAll downloads completed successfully.")
+    @info "\nAll databases downloaded successfully."
+    println("Please make sure you have downloaded the databases for all paradigms you are interested in.")
     
 end
 
