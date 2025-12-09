@@ -176,7 +176,7 @@ function _download(dbs, basepath_root, delete_zip, write_path_in_Eegle)
             mkpath(basepath)
 
             zippath = joinpath(basepath, string(db.name * ".zip"))
-            outdir  = joinpath(basepath, string(db.name))
+            #outdir  = joinpath(basepath, string(db.name))
 
             # --- Download ---
             #@info "Downloading $(db.name) ..."
@@ -186,11 +186,11 @@ function _download(dbs, basepath_root, delete_zip, write_path_in_Eegle)
             download(db.url, zippath)
 
             # --- Extraction ---
-            mkpath(outdir)
+            #mkpath(outdir)
             reader = ZipFile.Reader(zippath)
             try
                 for f in reader.files
-                    dest = joinpath(outdir, f.name)
+                    dest = joinpath(basepath, f.name)
                     if endswith(f.name, "/")
                         mkpath(dest)
                         continue
